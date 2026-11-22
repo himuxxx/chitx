@@ -1,4 +1,4 @@
--- পুরনো ভার্সন থেকে আসলে আগে পরিষ্কার
+-- পুরনো ভার্সন থেকে আসলে পরিষ্কার
 alter table public.letters drop column if exists passcode;
 drop function if exists public.find_letters(text);
 drop function if exists public.open_letter(uuid, text);
@@ -9,22 +9,22 @@ create table if not exists public.letters (
   to_name     text not null check (char_length(to_name) between 1 and 60),
   from_name   text check (from_name is null or char_length(from_name) <= 60),
   body        text not null check (char_length(body) between 1 and 4000),
-  is_public   boolean not null default false,
+  is_public   boolean not null default true,
   author_id   uuid references auth.users(id) on delete set null,
   created_at  timestamptz not null default now()
 );
 
 create index if not exists letters_to_name_idx on public.letters (lower(to_name));
-create index if not exists letters_public_idx  on public.letters (is_public, created_at desc);
+create index if not exists letters_created_idx  on public.letters (created_at desc);
 
 -- ২. RLS
 alter table public.letters enable row level security;
 
-drop policy if exists "read public letters" on public.letters;
-create policy "read public letters"
+drop policy if exists "read all letters" on public.letters;
+create policy "read all letters"
   on public.letters for select
   to anon, authenticated
-  using (is_public = true);
+  using (true);
 
 drop policy if exists "insert letters" on public.letters;
 create policy "insert letters"
@@ -58,11 +58,10 @@ returns table (
   to_name text,
   from_name text,
   body text,
-  is_public boolean,
   created_at timestamptz
 )
 language sql security definer stable set search_path = public as $$
-  select l.id, l.to_name, l.from_name, l.body, l.is_public, l.created_at
+  select l.id, l.to_name, l.from_name, l.body, l.created_at
   from public.letters l
   where lower(trim(l.to_name)) = lower(trim(p_name))
   order by l.created_at desc
@@ -75,11 +74,10 @@ returns table (
   to_name text,
   from_name text,
   body text,
-  is_public boolean,
   created_at timestamptz
 )
 language sql security definer stable set search_path = public as $$
-  select l.to_name, l.from_name, l.body, l.is_public, l.created_at
+  select l.to_name, l.from_name, l.body, l.created_at
   from public.letters l
   where l.id = p_id;
 $$;
