@@ -52,7 +52,7 @@ function fullCard(row) {
     <div class="letter-head">
       <span class="to">প্রিয় <b>${esc(row.to_name)}</b>,</span>
       <div class="badges">
-        <span class="badge seal">🔒 সিল করা</span>
+        <span class="badge seal">💌</span>  <!-- এখানে 💌 বসানো হয়েছে -->
       </div>
     </div>
     <div class="letter-body">${esc(row.body)}</div>
@@ -91,8 +91,6 @@ form.addEventListener('submit', async (e) => {
 
   if (!to) { toast('কার কাছে চিঠি — নামটা লিখো'); $('#to').focus(); return; }
   if (!body) { toast('চিঠিটা তো ফাঁকা 🙂'); bodyEl.focus(); return; }
-
-  // বাদ দেওয়া হলো: window.confirm() পপআপ
 
   submitBtn.disabled = true;
   const oldLabel = submitBtn.textContent;
