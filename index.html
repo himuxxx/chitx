@@ -2,7 +2,8 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#fdf7f0">
 <title>চিঠি — কিছু কথা রয়ে যায়</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,9 +12,9 @@
 <style>
   *{box-sizing:border-box}
   :root{--ink:#2b2118;--muted:#8a7b6c;--line:#ecdfd0;--paper:#fffdf8;--pink:#e0557a;--pink-2:#ff8fab}
-  html,body{height:100%}
+  html,body{height:100%; overflow-x:hidden;}
   body{
-    margin:0;padding:28px 16px 70px;
+    margin:0;padding:20px 12px 50px;
     font-family:'Hind Siliguri',system-ui,-apple-system,sans-serif;
     color:var(--ink);
     background:
@@ -22,18 +23,18 @@
       radial-gradient(900px 700px at 50% 120%, #fff2df 0%, transparent 60%),
       #fdf7f0;
     min-height:100vh;-webkit-font-smoothing:antialiased;
+    touch-action: manipulation;
   }
   .wrap{max-width:860px;margin:0 auto}
-  header{text-align:center;margin-bottom:26px}
+  header{text-align:center;margin-bottom:20px}
 
   /* 💌 নড়াচড়া করা সিল */
   .seal{
-    width:62px;height:62px;margin:0 auto 10px;
-    display:grid;place-items:center;font-size:30px;
+    width:56px;height:56px;margin:0 auto 8px;
+    display:grid;place-items:center;font-size:26px;
     background:linear-gradient(145deg,#fff,#ffeef3);
-    border:1px solid #f6d4de;border-radius:20px;
-    animation: sealWiggle 3s ease-in-out infinite,
-               sealGlow 2.4s ease-in-out infinite;
+    border:1px solid #f6d4de;border-radius:18px;
+    animation: sealWiggle 3s ease-in-out infinite, sealGlow 2.4s ease-in-out infinite;
     will-change: transform;
   }
   .seal:hover{animation-play-state:paused}
@@ -50,42 +51,55 @@
     50%{box-shadow:0 16px 34px -10px rgba(224,85,122,.85)}
   }
 
-  h1{font-family:'Tiro Bangla',serif;font-size:clamp(30px,6vw,44px);margin:0 0 6px;letter-spacing:.5px}
-  .tag{margin:0;color:var(--muted);font-size:15px;line-height:1.7}
+  h1{font-family:'Tiro Bangla',serif;font-size:clamp(28px,6vw,40px);margin:0 0 4px;letter-spacing:.5px}
+  .tag{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
 
-  .tabs{display:flex;gap:6px;padding:6px;background:rgba(255,255,255,.75);border:1px solid var(--line);
-    border-radius:16px;backdrop-filter:blur(8px);margin:0 auto 22px;max-width:480px;
-    box-shadow:0 10px 24px -18px rgba(43,33,24,.5)}
-  .tabs button{flex:1;padding:11px 8px;border:0;border-radius:11px;background:transparent;color:var(--muted);
+  /* মোবাইলে ট্যাব আটকে থাকবে (Sticky) */
+  .tabs{
+    display:flex;gap:6px;padding:6px;
+    background:rgba(255,255,255,.9);
+    border:1px solid var(--line);
+    border-radius:16px;
+    backdrop-filter:blur(12px);
+    margin:0 auto 16px;
+    max-width:480px;
+    box-shadow:0 10px 24px -18px rgba(43,33,24,.5);
+    position:sticky;top:10px;z-index:100;
+  }
+  .tabs button{flex:1;padding:10px 8px;border:0;border-radius:11px;background:transparent;color:var(--muted);
     font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:.18s}
   .tabs button:hover{color:var(--ink);background:rgba(224,85,122,.07)}
   .tabs button.active{background:linear-gradient(145deg,#fff,#ffe9ef);color:var(--pink);
     box-shadow:0 6px 16px -10px rgba(224,85,122,.9), inset 0 0 0 1px #f8d6e0}
 
-  .card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:22px;
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:20px 16px;
     box-shadow:0 24px 50px -34px rgba(43,33,24,.55)}
   .card + .card{margin-top:16px}
 
-  label{display:block;font-size:14px;font-weight:600;margin:0 0 7px;color:#5a4b3d}
-  .field{margin-bottom:16px}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:560px){.row{grid-template-columns:1fr}}
-
-  input[type=text], textarea{width:100%;padding:12px 14px;font-family:inherit;font-size:15px;color:var(--ink);
-    background:#fffefb;border:1px solid #e9dccc;border-radius:13px;outline:none;transition:.16s}
+  label{display:block;font-size:14px;font-weight:600;margin:0 0 6px;color:#5a4b3d}
+  .field{margin-bottom:14px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  
+  /* ইনপুট ফিল্ড ১৬ পিক্সেল করা হয়েছে যাতে মোবাইলে স্ক্রিন জুম না হয় */
+  input[type=text], textarea{
+    width:100%;padding:12px 14px;font-family:inherit;font-size:16px;color:var(--ink);
+    background:#fffefb;border:1px solid #e9dccc;border-radius:13px;outline:none;transition:.16s;
+  }
   input:focus, textarea:focus{border-color:var(--pink-2);box-shadow:0 0 0 4px rgba(255,143,171,.18);background:#fff}
-  textarea{min-height:170px;resize:vertical;line-height:1.95;font-family:'Tiro Bangla',serif;font-size:16.5px}
+  
+  /* টেক্সট এরিয়ার উচ্চতা কমিয়ে ফিক্সড করা হয়েছে */
+  textarea{height:140px;min-height:140px;max-height:240px;resize:vertical;line-height:1.8;font-family:'Tiro Bangla',serif;font-size:16px}
 
-  .hint{font-size:12.5px;color:var(--muted);margin:7px 0 0;line-height:1.6}
+  .hint{font-size:12px;color:var(--muted);margin:6px 0 0;line-height:1.5}
 
-  .notice{display:flex;gap:11px;align-items:flex-start;background:#fff4e8;border:1px solid #f7d9b8;
-    border-radius:14px;padding:13px 15px;margin:0 0 16px;font-size:13.5px;line-height:1.75;color:#7a5220}
-  .notice .i{font-size:18px;line-height:1.2}
+  .notice{display:flex;gap:10px;align-items:flex-start;background:#fff4e8;border:1px solid #f7d9b8;
+    border-radius:14px;padding:12px 14px;margin:0 0 14px;font-size:13px;line-height:1.6;color:#7a5220}
+  .notice .i{font-size:16px;line-height:1.2}
   .notice.err{background:#fdeaea;border-color:#f6c7c4;color:#8a1c16}
 
-  .agree{display:flex;gap:10px;align-items:flex-start;margin:0 0 16px;padding:13px 15px;
-    border:1px solid #f3c3d2;border-radius:14px;background:#fff8fa;cursor:pointer;font-size:14px;line-height:1.7;color:#5a3b45}
-  .agree input{margin:4px 0 0;accent-color:var(--pink);width:17px;height:17px;flex:none}
+  .agree{display:flex;gap:10px;align-items:flex-start;margin:0 0 14px;padding:12px 14px;
+    border:1px solid #f3c3d2;border-radius:14px;background:#fff8fa;cursor:pointer;font-size:13.5px;line-height:1.6;color:#5a3b45}
+  .agree input{margin:3px 0 0;accent-color:var(--pink);width:16px;height:16px;flex:none}
 
   button.primary{width:100%;padding:14px;border:0;border-radius:14px;font-family:inherit;font-size:16px;
     font-weight:700;color:#fff;background:linear-gradient(145deg,#ef6b8d,#d9446b);cursor:pointer;
@@ -93,41 +107,39 @@
   button.primary:hover{transform:translateY(-1px);box-shadow:0 20px 34px -16px rgba(217,68,107,1)}
   button.primary:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
 
-  .searchbar{display:flex;gap:10px}
+  .searchbar{display:flex;gap:8px}
   .searchbar input{flex:1}
-  .searchbar button{padding:0 22px;border:0;border-radius:13px;font-family:inherit;font-size:15px;
+  .searchbar button{padding:0 18px;border:0;border-radius:13px;font-family:inherit;font-size:15px;
     font-weight:700;color:#fff;background:linear-gradient(145deg,#ef6b8d,#d9446b);cursor:pointer;white-space:nowrap;
     box-shadow:0 12px 24px -14px rgba(217,68,107,.9)}
   .searchbar button:disabled{opacity:.6;cursor:not-allowed}
 
-  .letters{margin-top:18px;display:flex;flex-direction:column;gap:16px}
+  .letters{margin-top:16px;display:flex;flex-direction:column;gap:14px}
   .letter{position:relative;
     background:repeating-linear-gradient(180deg, transparent 0 31px, rgba(224,85,122,.07) 31px 32px), var(--paper);
-    border:1px solid var(--line);border-radius:18px;padding:20px 20px 18px 26px;
+    border:1px solid var(--line);border-radius:16px;padding:16px 14px 14px 22px;
     box-shadow:0 20px 42px -32px rgba(43,33,24,.6);overflow:hidden;animation:rise .32s ease both}
   @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .letter::before{content:"";position:absolute;inset:0 auto 0 0;width:5px;
+  .letter::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;
     background:linear-gradient(180deg,#ffb3c6,#e0557a)}
 
   .letter-head{display:flex;justify-content:space-between;align-items:center;gap:10px;
-    margin-bottom:10px;flex-wrap:wrap}
-  .letter-head .to{font-size:15px;color:#6b5b4c}
-  .letter-head .to b{color:var(--ink);font-size:16px}
+    margin-bottom:8px;flex-wrap:wrap}
+  .letter-head .to{font-size:14.5px;color:#6b5b4c}
+  .letter-head .to b{color:var(--ink);font-size:15.5px}
   .badges{display:flex;gap:6px;flex-wrap:wrap}
   
-  /* 💌 ব্যাজের স্টাইল (গোল এবং সেন্টারড) */
   .badge{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;letter-spacing:.2px}
-  
   .badge.seal{
     background: #fdeef2;
     border: 1px solid #f7c9d6;
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 13px;
     padding: 0;
     animation: heartWiggle 2s ease-in-out infinite;
   }
@@ -138,27 +150,36 @@
     75% { transform: rotate(10deg) scale(1.05); }
   }
 
-  .letter-body{font-family:'Tiro Bangla',serif;font-size:16.5px;line-height:2.05;
-    white-space:pre-wrap;word-break:break-word;margin:4px 0 14px}
-  .letter-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
-    font-size:12.5px;color:var(--muted);border-top:1px dashed #eadfd0;padding-top:11px}
+  .letter-body{font-family:'Tiro Bangla',serif;font-size:16px;line-height:1.9;
+    white-space:pre-wrap;word-break:break-word;margin:4px 0 12px}
+  .letter-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;
+    font-size:12px;color:var(--muted);border-top:1px dashed #eadfd0;padding-top:10px}
   .letter-foot .from{font-weight:600;color:#7a6857}
 
-  .empty{text-align:center;color:var(--muted);padding:34px 16px;font-size:14.5px;line-height:1.9}
-  .empty .big{display:block;font-size:32px;margin-bottom:8px}
-  .stats{text-align:center;font-size:13px;color:var(--muted);margin:14px 0 0}
+  .empty{text-align:center;color:var(--muted);padding:30px 16px;font-size:14.5px;line-height:1.8}
+  .empty .big{display:block;font-size:28px;margin-bottom:8px}
+  .stats{text-align:center;font-size:12.5px;color:var(--muted);margin:12px 0 0}
 
-  .shared-wrap{margin-bottom:22px}
+  .shared-wrap{margin-bottom:18px}
   .shared-title{font-size:13px;font-weight:700;color:var(--pink);letter-spacing:.4px;margin:0 0 8px;text-align:center}
 
-  footer{text-align:center;font-size:12.5px;color:#a2937f;margin-top:34px;line-height:2}
+  footer{text-align:center;font-size:12px;color:#a2937f;margin-top:30px;line-height:1.8}
   footer a{color:var(--pink);text-decoration:none;font-weight:700}
   footer a:hover{text-decoration:underline}
 
-  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:#2b2118;color:#fff;
-    padding:12px 20px;border-radius:14px;font-size:14px;font-weight:600;
-    box-shadow:0 18px 40px -18px rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:.25s;z-index:99;max-width:90vw}
+  .toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);background:#2b2118;color:#fff;
+    padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:600;
+    box-shadow:0 18px 40px -18px rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:.25s;z-index:999;max-width:90vw;text-align:center}
   .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* মোবাইলের জন্য বিশেষ সেটিংস */
+  @media(max-width:560px){
+    .row{grid-template-columns:1fr; gap:10px}
+    textarea{height:120px; min-height:120px;}
+    .searchbar {flex-direction:column;}
+    .searchbar button{padding:12px;}
+    .tabs { max-width:100%; }
+  }
 
   @media (prefers-reduced-motion: reduce){
     .seal{animation:none}
@@ -245,7 +266,7 @@
   <!-- ============ WALL ============ -->
   <section id="tab-wall" hidden>
     <div class="card" style="text-align:center">
-      <p style="margin:0;font-size:15px;line-height:1.9;color:#5a4b3d">
+      <p style="margin:0;font-size:14.5px;line-height:1.8;color:#5a4b3d">
         🕊️ এখানে সব চিঠি — অচেনা মানুষের অচেনা মনের কথা।
       </p>
     </div>
