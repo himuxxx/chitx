@@ -52,7 +52,7 @@ function fullCard(row) {
     <div class="letter-head">
       <span class="to">প্রিয় <b>${esc(row.to_name)}</b>,</span>
       <div class="badges">
-        <span class="badge seal">💌</span>  <!-- এখানে 💌 বসানো হয়েছে -->
+        <span class="badge seal">💌</span>
       </div>
     </div>
     <div class="letter-body">${esc(row.body)}</div>
@@ -188,7 +188,10 @@ async function renderWall() {
 
     box.innerHTML = '';
     data.forEach((row) => box.appendChild(fullCard(row)));
-    stats.textContent = `মোট ${data.length} টি চিঠি · সব সিল করা`;
+    
+    // এখানে "সব সিল করা" বাদ দেওয়া হয়েছে
+    stats.textContent = `মোট ${data.length} টি চিঠি`; 
+    
   } catch (err) {
     box.innerHTML = emptyHTML('⚠️', 'এরর: ' + esc(err.message));
     stats.textContent = '';
