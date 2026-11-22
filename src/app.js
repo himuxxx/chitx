@@ -40,8 +40,8 @@ function showTab(name) {
   tabs.forEach((b) => b.classList.toggle('active', b.dataset.tab === name));
   ['write', 'search', 'wall'].forEach((n) => { $('#tab-' + n).hidden = n !== name; });
   
-  // ট্যাব চেঞ্জ করার সময় পেজ স্ক্রল থাকলে ওপরে নিয়ে আসবে
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // ট্যাব চেঞ্জ হলে ভেতরের স্ক্রলবার একদম ওপরে নিয়ে যাবে
+  document.querySelectorAll('.letters-box').forEach(box => box.scrollTop = 0);
 
   if (name === 'wall') renderWall();
   if (name === 'search') $('#q').focus();
@@ -213,10 +213,9 @@ async function checkShared() {
 
     $('#sharedList').innerHTML = '';
     $('#sharedList').appendChild(fullCard(data[0]));
-    $('#sharedWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (err) {
     $('#sharedWrap').hidden = false;
-    $('#sharedList').innerHTML = emptyHTML('🔒', 'এই চিঠিটা খোলা যায়নি — লিংকটা ভুল হতে পারে।');
+    $('#sharedList').innerHTML = emptyHTML('🔒', 'এই চিঠিটা খোলা যায়নি।');
   }
 }
 
