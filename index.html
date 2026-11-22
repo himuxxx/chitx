@@ -115,22 +115,27 @@
   .letter-head .to b{color:var(--ink);font-size:16px}
   .badges{display:flex;gap:6px;flex-wrap:wrap}
   
-  /* 💌 ব্যাজের স্টাইল ও অ্যানিমেশন */
+  /* 💌 ব্যাজের স্টাইল (গোল এবং সেন্টারড) */
   .badge{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;letter-spacing:.2px}
+  
   .badge.seal{
     background: #fdeef2;
-    color: #c0405f;
     border: 1px solid #f7c9d6;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 14px;
-    padding: 3px 9px;
+    padding: 0;
     animation: heartWiggle 2s ease-in-out infinite;
-    display: inline-block;
   }
 
   @keyframes heartWiggle {
     0%, 100% { transform: rotate(0deg) scale(1); }
-    25% { transform: rotate(-8deg) scale(1.1); }
-    75% { transform: rotate(8deg) scale(1.1); }
+    25% { transform: rotate(-10deg) scale(1.05); }
+    75% { transform: rotate(10deg) scale(1.05); }
   }
 
   .letter-body{font-family:'Tiro Bangla',serif;font-size:16.5px;line-height:2.05;
@@ -168,7 +173,6 @@
   <header>
     <div class="seal">💌</div>
     <h1>চিঠি</h1>
-    <!-- টেক্সট ১ পরিবর্তন করা হয়েছে -->
     <p class="tag">কিছু কথা রয়ে যায়, চিঠি হয়ে।</p>
   </header>
 
@@ -250,7 +254,6 @@
   </section>
 
   <footer>
-    <!-- টেক্সট ২ পরিবর্তন করা হয়েছে -->
     একটি ডিজিটাল ডায়েরি · সবার জন্য উন্মুক্ত<br>
     ❤️ Developer <a href="https://t.me/shakib2016" target="_blank" rel="noopener noreferrer">Sakib</a> ❤️
   </footer>
