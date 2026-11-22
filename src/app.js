@@ -92,35 +92,42 @@ form.addEventListener('submit', async (e) => {
   if (!to) { toast('কার কাছে চিঠি — নামটা লিখো'); $('#to').focus(); return; }
   if (!body) { toast('চিঠিটা তো ফাঁকা 🙂'); bodyEl.focus(); return; }
 
-  if (!confirm('পাঠানোর পর আর এডিট বা ডিলিট করা যাবে না।\n\nতুমি কি নিশ্চিত?')) return;
+  // বাদ দেওয়া হলো: window.confirm() পপআপ
 
   submitBtn.disabled = true;
   const oldLabel = submitBtn.textContent;
   submitBtn.textContent = 'সিল করা হচ্ছে...';
 
-  const { error } = await supabase.from('letters').insert({
-    to_name: to,
-    from_name: from || null,
-    body,
-    is_public: true
-  });
+  try {
+    const { error } = await supabase.from('letters').insert({
+      to_name: to,
+      from_name: from || null,
+      body,
+      is_public: true
+    });
 
-  submitBtn.textContent = oldLabel;
+    if (error) throw error;
 
-  if (error) {
+    form.reset();
+    counter.textContent = '0';
+    submitBtn.disabled = true;
+
+    toast('চিঠি সিল করে রাখা হলো — আর বদলানো যাবে না 💌');
+    $('#q').value = to;
+    showTab('search');
+    doSearch();
+
+  } catch (err) {
+    console.error('Insert error:', err);
+    if (err.message === 'Failed to fetch') {
+      toast('নেটওয়ার্ক এরর! Supabase URL বা ইন্টারনেট চেক করুন।');
+    } else {
+      toast('পাঠানো যায়নি: ' + err.message);
+    }
+  } finally {
+    submitBtn.textContent = oldLabel;
     submitBtn.disabled = !agreeEl.checked;
-    toast('পাঠানো যায়নি: ' + error.message);
-    return;
   }
-
-  form.reset();
-  counter.textContent = '0';
-  submitBtn.disabled = true;
-
-  toast('চিঠি সিল করে রাখা হলো — আর বদলানো যাবে না 💌');
-  $('#q').value = to;
-  showTab('search');
-  doSearch();
 });
 
 /* ---------- SEARCH ---------- */
@@ -134,23 +141,25 @@ async function doSearch() {
   box.innerHTML = emptyHTML('⏳', 'খোঁজা হচ্ছে...');
   $('#searchBtn').disabled = true;
 
-  const { data, error } = await supabase.rpc('find_letters', { p_name: q });
-  $('#searchBtn').disabled = false;
+  try {
+    const { data, error } = await supabase.rpc('find_letters', { p_name: q });
+    if (error) throw error;
 
-  if (error) {
-    box.innerHTML = emptyHTML('⚠️', 'এরর: ' + esc(error.message));
-    return;
-  }
-  if (!data || !data.length) {
-    box.innerHTML = emptyHTML(
-      '💭',
-      `‘${esc(q)}’ নামে কোনো চিঠি এখনো লেখা হয়নি।<br>তুমি লেখো — হয়তো সে অপেক্ষা করছে।`
-    );
-    return;
-  }
+    if (!data || !data.length) {
+      box.innerHTML = emptyHTML(
+        '💭',
+        `‘${esc(q)}’ নামে কোনো চিঠি এখনো লেখা হয়নি।<br>তুমি লেখো — হয়তো সে অপেক্ষা করছে।`
+      );
+      return;
+    }
 
-  box.innerHTML = '';
-  data.forEach((row) => box.appendChild(fullCard(row)));
+    box.innerHTML = '';
+    data.forEach((row) => box.appendChild(fullCard(row)));
+  } catch (err) {
+    box.innerHTML = emptyHTML('⚠️', 'এরর: ' + esc(err.message));
+  } finally {
+    $('#searchBtn').disabled = false;
+  }
 }
 
 $('#searchBtn').addEventListener('click', doSearch);
@@ -164,26 +173,28 @@ async function renderWall() {
 
   box.innerHTML = emptyHTML('⏳', 'লোড হচ্ছে...');
 
-  const { data, error } = await supabase
-    .from('letters')
-    .select('id, to_name, from_name, body, created_at')
-    .order('created_at', { ascending: false })
-    .limit(100);
+  try {
+    const { data, error } = await supabase
+      .from('letters')
+      .select('id, to_name, from_name, body, created_at')
+      .order('created_at', { ascending: false })
+      .limit(100);
 
-  if (error) {
-    box.innerHTML = emptyHTML('⚠️', 'এরর: ' + esc(error.message));
-    stats.textContent = '';
-    return;
-  }
-  if (!data || !data.length) {
-    box.innerHTML = emptyHTML('🕊️', 'দেওয়াল এখনো ফাঁকা। প্রথম চিঠিটা তোমার হোক।');
-    stats.textContent = '';
-    return;
-  }
+    if (error) throw error;
 
-  box.innerHTML = '';
-  data.forEach((row) => box.appendChild(fullCard(row)));
-  stats.textContent = `মোট ${data.length} টি চিঠি · সব সিল করা`;
+    if (!data || !data.length) {
+      box.innerHTML = emptyHTML('🕊️', 'দেওয়াল এখনো ফাঁকা। প্রথম চিঠিটা তোমার হোক।');
+      stats.textContent = '';
+      return;
+    }
+
+    box.innerHTML = '';
+    data.forEach((row) => box.appendChild(fullCard(row)));
+    stats.textContent = `মোট ${data.length} টি চিঠি · সব সিল করা`;
+  } catch (err) {
+    box.innerHTML = emptyHTML('⚠️', 'এরর: ' + esc(err.message));
+    stats.textContent = '';
+  }
 }
 
 /* ---------- SHARED LINK (#l=UUID) ---------- */
@@ -192,16 +203,19 @@ async function checkShared() {
   const m = location.hash.match(/^#l=([0-9a-fA-F-]{36})$/);
   if (!m) return;
 
-  const { data, error } = await supabase.rpc('open_letter', { p_id: m[1] });
-  $('#sharedWrap').hidden = false;
+  try {
+    const { data, error } = await supabase.rpc('open_letter', { p_id: m[1] });
+    $('#sharedWrap').hidden = false;
 
-  if (error || !data || !data.length) {
+    if (error || !data || !data.length) throw new Error('Not found');
+
+    $('#sharedList').innerHTML = '';
+    $('#sharedList').appendChild(fullCard(data[0]));
+    $('#sharedWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) {
+    $('#sharedWrap').hidden = false;
     $('#sharedList').innerHTML = emptyHTML('🔒', 'এই চিঠিটা খোলা যায়নি — লিংকটা ভুল হতে পারে।');
-    return;
   }
-  $('#sharedList').innerHTML = '';
-  $('#sharedList').appendChild(fullCard(data[0]));
-  $('#sharedWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 window.addEventListener('hashchange', checkShared);
