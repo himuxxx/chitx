@@ -12,9 +12,9 @@
 <style>
   *{box-sizing:border-box}
   :root{--ink:#2b2118;--muted:#8a7b6c;--line:#ecdfd0;--paper:#fffdf8;--pink:#e0557a;--pink-2:#ff8fab}
-  html{height:100%; overflow-x:hidden;}
+  html,body{height:100%; overflow-x:hidden;}
   body{
-    margin:0;padding:20px 12px 10px;
+    margin:0;padding:20px 12px 30px;
     font-family:'Hind Siliguri',system-ui,-apple-system,sans-serif;
     color:var(--ink);
     background:
@@ -25,7 +25,10 @@
     min-height:100vh; -webkit-font-smoothing:antialiased;
     touch-action: manipulation;
   }
-  .wrap{max-width:860px;margin:0 auto; display:flex; flex-direction:column;}
+  /* এটাই ছিল আসল ভুল! hidden থাকলে যেন জোর করে দেখা না যায় */
+  [hidden] { display: none !important; }
+
+  .wrap{max-width:860px;margin:0 auto;}
   header{text-align:center;margin-bottom:20px}
 
   /* 💌 নড়াচড়া করা সিল */
@@ -54,10 +57,10 @@
   h1{font-family:'Tiro Bangla',serif;font-size:clamp(28px,6vw,40px);margin:0 0 4px;letter-spacing:.5px}
   .tag{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
 
-  /* ট্যাবগুলো আটকে থাকবে */
+  /* ট্যাবগুলো স্ক্রল করলেও ওপরে আটকে থাকবে */
   .tabs{
     display:flex;gap:6px;padding:6px;
-    background:rgba(255,255,255,.9);
+    background:rgba(255,255,255,.95);
     border:1px solid var(--line);
     border-radius:16px;
     backdrop-filter:blur(12px);
@@ -65,7 +68,6 @@
     max-width:480px; width:100%;
     box-shadow:0 10px 24px -18px rgba(43,33,24,.5);
     position:sticky;top:10px;z-index:100;
-    flex-shrink: 0;
   }
   .tabs button{flex:1;padding:10px 8px;border:0;border-radius:11px;background:transparent;color:var(--muted);
     font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:.18s}
@@ -81,14 +83,13 @@
   .field{margin-bottom:14px}
   .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   
-  /* ইনপুট ফিল্ড ১৬ পিক্সেল (মোবাইলে জুম বন্ধ করতে) */
   input[type=text], textarea{
     width:100%;padding:12px 14px;font-family:inherit;font-size:16px;color:var(--ink);
     background:#fffefb;border:1px solid #e9dccc;border-radius:13px;outline:none;transition:.16s;
   }
   input:focus, textarea:focus{border-color:var(--pink-2);box-shadow:0 0 0 4px rgba(255,143,171,.18);background:#fff}
   
-  textarea{height:140px;min-height:140px;max-height:240px;resize:vertical;line-height:1.8;font-family:'Tiro Bangla',serif;font-size:16px}
+  textarea{height:150px;min-height:150px;resize:vertical;line-height:1.8;font-family:'Tiro Bangla',serif;font-size:16px}
 
   .hint{font-size:12px;color:var(--muted);margin:6px 0 0;line-height:1.5}
 
@@ -164,93 +165,25 @@
     box-shadow:0 18px 40px -18px rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:.25s;z-index:999;max-width:90vw;text-align:center}
   .toast.show{opacity:1;transform:translate(-50%,0)}
 
-  /* ========================================= */
-  /* 📱 মোবাইলের জন্য "No-Scroll" স্পেশাল সেটিং */
-  /* ========================================= */
+  /* 📱 মোবাইলের জন্য শুধু চিঠি লেখার ফর্মটা ছোট করা হলো */
   @media(max-width: 768px){
-    html, body {
-      height: 100dvh; /* ফোনের স্ক্রিনের সঠিক উচ্চতা */
-      overflow: hidden; /* পুরো পেজ স্ক্রল বন্ধ */
-      padding: 8px 10px;
-    }
-    .wrap {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    header {
-      margin-bottom: 8px;
-      flex-shrink: 0; /* হেডার ছোট হয়ে যাবে না */
-    }
-    h1 { font-size: 24px; margin-bottom: 2px; }
-    .seal { display: none; } /* জায়গা বাঁচাতে লোগো লুকানো হলো */
-    .tag { display: none; }  /* সাবটাইটেল লুকানো হলো */
+    body { padding: 10px 10px 20px; }
+    header { margin-bottom: 10px; }
+    .seal { display: none; } /* জায়গা বাঁচাতে */
+    h1 { font-size: 26px; }
+    .tag { display: none; }
     
-    .tabs {
-      margin-bottom: 8px;
-      padding: 4px;
-      max-width: 100%;
-      flex-shrink: 0;
-    }
-    .tabs button { padding: 8px; font-size: 14px; }
+    .tabs { margin-bottom: 10px; top: 5px; }
     
-    /* 💌 চিঠি লেখার ট্যাব রিসাইজ */
-    #tab-write {
-      flex: 1; /* বাকি থাকা জায়গা নেবে */
-      display: flex;
-      flex-direction: column;
-      overflow: hidden; /* স্ক্রল বন্ধ */
-    }
-    #tab-write .card {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 12px;
-      margin: 0;
-      overflow: hidden;
-    }
-    #tab-write .notice { display: none; } /* জায়গা বাঁচাতে নোটিশ লুকানো হলো */
+    .card { padding: 14px; }
+    .notice { display: none; } /* নোটিশ লুকানো হলো যাতে ফর্ম ফিট হয় */
     
-    #letterForm {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .row { gap: 8px; margin-bottom: 8px; flex-shrink: 0; }
-    .field { margin-bottom: 8px; flex-shrink: 0; }
-    label { margin-bottom: 4px; font-size: 13px; }
+    .row{grid-template-columns:1fr; gap:8px; margin-bottom:8px;}
+    .field { margin-bottom: 8px; }
+    textarea { height: 120px; min-height: 100px; }
     
-    /* টেক্সট এরিয়া অটোমেটিক স্ক্রিনে ফিট হবে */
-    #body {
-      flex: 1; 
-      height: auto !important;
-      min-height: 80px; /* সবচেয়ে ছোট সাইজ */
-      max-height: none;
-      resize: none;
-    }
-    .hint { font-size: 11px; margin-top: 4px; flex-shrink: 0; }
-    .agree {
-      margin: 8px 0;
-      padding: 8px 10px;
-      font-size: 12px;
-      flex-shrink: 0;
-    }
-    .agree input { width: 15px; height: 15px; }
-    button.primary { padding: 10px; font-size: 15px; flex-shrink: 0; }
-    
-    /* দেওয়াল ও সার্চ ট্যাব */
-    #tab-search, #tab-wall {
-      flex: 1;
-      overflow-y: auto; /* শুধু এই ট্যাবগুলো স্ক্রল হবে */
-      display: flex;
-      flex-direction: column;
-      padding-bottom: 10px;
-    }
-    .searchbar { flex-direction: column; }
-    .searchbar button { padding: 10px; }
-    
-    footer { display: none; } /* মোবাইলে ফুটার লুকানো হলো */
+    .agree { margin-bottom: 10px; padding: 10px; }
+    footer { margin-top: 20px; }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -307,7 +240,7 @@
           </div>
         </div>
 
-        <div class="field" style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
+        <div class="field">
           <label for="body">চিঠি</label>
           <textarea id="body" placeholder="প্রিয় ...,&#10;&#10;কি লিখবে ভাবছো? শুরু করো..." maxlength="4000" required></textarea>
           <p class="hint"><span id="counter">0</span>/4000 · ফোন নম্বর, ঠিকানা, পাসওয়ার্ডের মতো ব্যক্তিগত তথ্য লিখো না।</p>
