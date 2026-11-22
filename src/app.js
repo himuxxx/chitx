@@ -40,10 +40,9 @@ function showTab(name) {
   tabs.forEach((b) => b.classList.toggle('active', b.dataset.tab === name));
   ['write', 'search', 'wall'].forEach((n) => { $('#tab-' + n).hidden = n !== name; });
   
-  // দেওয়াল বা সার্চে গেলে ভেতরের স্ক্রলবার একদম ওপরে নিয়ে যাবে
-  const activeTab = $('#tab-' + name);
-  if (activeTab) activeTab.scrollTop = 0; 
-  
+  // ট্যাব চেঞ্জ করার সময় পেজ স্ক্রল থাকলে ওপরে নিয়ে আসবে
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
   if (name === 'wall') renderWall();
   if (name === 'search') $('#q').focus();
 }
