@@ -39,6 +39,11 @@ const tabs = $$('.tabs button');
 function showTab(name) {
   tabs.forEach((b) => b.classList.toggle('active', b.dataset.tab === name));
   ['write', 'search', 'wall'].forEach((n) => { $('#tab-' + n).hidden = n !== name; });
+  
+  // দেওয়াল বা সার্চে গেলে ভেতরের স্ক্রলবার একদম ওপরে নিয়ে যাবে
+  const activeTab = $('#tab-' + name);
+  if (activeTab) activeTab.scrollTop = 0; 
+  
   if (name === 'wall') renderWall();
   if (name === 'search') $('#q').focus();
 }
@@ -188,10 +193,7 @@ async function renderWall() {
 
     box.innerHTML = '';
     data.forEach((row) => box.appendChild(fullCard(row)));
-    
-    // এখানে "সব সিল করা" বাদ দেওয়া হয়েছে
-    stats.textContent = `মোট ${data.length} টি চিঠি`; 
-    
+    stats.textContent = `মোট ${data.length} টি চিঠি`;
   } catch (err) {
     box.innerHTML = emptyHTML('⚠️', 'এরর: ' + esc(err.message));
     stats.textContent = '';
