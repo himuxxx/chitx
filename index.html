@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>চিঠি — একবার লেখা, চিরকালের</title>
+<title>চিঠি — কিছু কথা রয়ে যায়</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -114,8 +114,24 @@
   .letter-head .to{font-size:15px;color:#6b5b4c}
   .letter-head .to b{color:var(--ink);font-size:16px}
   .badges{display:flex;gap:6px;flex-wrap:wrap}
+  
+  /* 💌 ব্যাজের স্টাইল ও অ্যানিমেশন */
   .badge{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;letter-spacing:.2px}
-  .badge.seal{background:#fdeef2;color:#c0405f;border:1px solid #f7c9d6}
+  .badge.seal{
+    background: #fdeef2;
+    color: #c0405f;
+    border: 1px solid #f7c9d6;
+    font-size: 14px;
+    padding: 3px 9px;
+    animation: heartWiggle 2s ease-in-out infinite;
+    display: inline-block;
+  }
+
+  @keyframes heartWiggle {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-8deg) scale(1.1); }
+    75% { transform: rotate(8deg) scale(1.1); }
+  }
 
   .letter-body{font-family:'Tiro Bangla',serif;font-size:16.5px;line-height:2.05;
     white-space:pre-wrap;word-break:break-word;margin:4px 0 14px}
@@ -142,6 +158,7 @@
   @media (prefers-reduced-motion: reduce){
     .seal{animation:none}
     .letter{animation:none}
+    .badge.seal{animation:none}
   }
 </style>
 </head>
@@ -151,7 +168,8 @@
   <header>
     <div class="seal">💌</div>
     <h1>চিঠি</h1>
-    <p class="tag">একবার লেখা — চিরকালের। এডিট নেই, ডিলিট নেই।</p>
+    <!-- টেক্সট ১ পরিবর্তন করা হয়েছে -->
+    <p class="tag">কিছু কথা রয়ে যায়, চিঠি হয়ে।</p>
   </header>
 
   <div id="configError" hidden>
@@ -232,7 +250,8 @@
   </section>
 
   <footer>
-    রাত ৩টের ভাবনা থেকে তৈরি · চিঠি একবার লেখা হলে অপরিবর্তনীয়<br>
+    <!-- টেক্সট ২ পরিবর্তন করা হয়েছে -->
+    একটি ডিজিটাল ডায়েরি · সবার জন্য উন্মুক্ত<br>
     ❤️ Developer <a href="https://t.me/shakib2016" target="_blank" rel="noopener noreferrer">Sakib</a> ❤️
   </footer>
 </div>
